@@ -54,10 +54,18 @@ if [ -n "${BACKUP_MAX_BEFORE_DELETE}" ]; then
     fi
 fi
 
+# Create the file name
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-ABSOLUTE_BACKUP_DIR="/home/backupuser/${BACKUP_DIR}"
+# Create the container backup directory
+LOCAL_BACKUP_DIR=${BACKUP_DIR:-tmp}
+ABSOLUTE_BACKUP_DIR="/home/backupuser/${LOCAL_BACKUP_DIR}"
 ABSOLUTE_BACKUP_FILE="${ABSOLUTE_BACKUP_DIR}/${TIMESTAMP}"
-S3_BACKUP_FILE="${BACKUP_DIR}/${TIMESTAMP}"
+
+if [ -z "${BACKUP_DIR}" ]; then
+    S3_BACKUP_FILE="${TIMESTAMP}"
+else
+    S3_BACKUP_FILE="${BACKUP_DIR}/${TIMESTAMP}"
+fi
 
 # Create the backup directory if it doesn't exist
 mkdir -p "${ABSOLUTE_BACKUP_DIR}"
@@ -89,7 +97,7 @@ cd "/home/backupuser"
 case "${BACKUP_COMPRESSION}" in
     gzip)
         echo "Compressing backup with gzip..."
-        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${BACKUP_DIR}" 2>&1)
+        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${LOCAL_BACKUP_DIR}" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to create tar archive. Details:"
@@ -111,7 +119,7 @@ case "${BACKUP_COMPRESSION}" in
         ;;
     xz)
         echo "Compressing backup with xz..."
-        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${BACKUP_DIR}" 2>&1)
+        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${LOCAL_BACKUP_DIR}" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to create tar archive. Details:"
@@ -133,7 +141,7 @@ case "${BACKUP_COMPRESSION}" in
         ;;
     zip)
         echo "Compressing backup with zip..."
-        compress_output=$(zip -r "${ABSOLUTE_BACKUP_FILE}.zip" . 2>&1)
+        compress_output=$(zip -r "${ABSOLUTE_BACKUP_FILE}.zip" "${LOCAL_BACKUP_DIR}" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to compress the backup with zip. Details:"
