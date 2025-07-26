@@ -17,7 +17,7 @@ S3_BUCKET=${S3_BUCKET}
 
 # Validate environment variables
 if [ -z "${MINIO_ENDPOINT}" ] || [ -z "${MINIO_ACCESS_KEY}" ] || [ -z "${MINIO_SECRET_KEY}" ] || [ -z "${MINIO_BUCKET}" ] || [ -z "${S3_ENDPOINT}" ] || [ -z "${S3_ACCESS_TOKEN}" ] || [ -z "${S3_SECRET_ACCESS_TOKEN}" ] || [ -z "${S3_BUCKET}" ]; then
-    echo "Error: Missing environment variables"
+    echo "Error: Missing environment variables."
     exit 1
 fi
 
@@ -76,10 +76,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Successful backup in ${ABSOLUTE_BACKUP_DIR}"
+echo "Successful backup in '${ABSOLUTE_BACKUP_DIR}'."
 
 # Compress the backup
-echo "Compressing backup..."
 if [ -z "${BACKUP_COMPRESSION}" ]; then
     BACKUP_COMPRESSION="zip"
     echo "BACKUP_COMPRESSION not set. Defaulting to 'zip'."
@@ -148,13 +147,13 @@ case "${BACKUP_COMPRESSION}" in
         ;;
     *)
         echo "Error: Unsupported compression method '${BACKUP_COMPRESSION}'."
-        echo "Deleting local backup folder ${ABSOLUTE_BACKUP_DIR}..."
+        echo "Deleting local backup folder '${ABSOLUTE_BACKUP_DIR}'..."
         rm -rf "${ABSOLUTE_BACKUP_DIR}"
         exit 1
         ;;
 esac
 
-echo "Compression successful: ${S3_BACKUP_FILE}"
+echo "Compression successful '${S3_BACKUP_FILE}'."
 
 # Upload to S3
 echo "Uploading to S3..."
@@ -170,10 +169,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Upload to S3 successful"
+echo "Upload to S3 successful."
 
 if [ -z "${BACKUP_MAX_BEFORE_DELETE}" ]; then
-  echo "No limit on the number of backups to keep"
+  echo "No limit on the number of backups to keep."
 else
     echo "Deleting old backups..."
     BACKUP_LIST=$(s3cmd ls s3://${S3_BUCKET}/${BACKUP_DIR}/ \
@@ -191,15 +190,15 @@ else
         --host-bucket=${S3_ENDPOINT} 2>&1)
 
         if [ $? -ne 0 ]; then
-            echo "Error: Failed to delete ${FILE_PATH}. Details:"
+            echo "Error: Failed to delete '${FILE_PATH}'. Details:"
             echo "${s3cmd_del_output}"
         else
-            echo "Successfully deleted ${FILE_PATH}"
+            echo "Successfully deleted '${FILE_PATH}'."
         fi
     done
 
-    echo "Old backups have been sorted"
+    echo "Old backups have been sorted."
 fi
 
-echo "Cleaning up local backup folder ${ABSOLUTE_BACKUP_DIR}..."
+echo "Cleaning up local backup folder '${ABSOLUTE_BACKUP_DIR}'..."
 rm -rf "${ABSOLUTE_BACKUP_DIR}"
