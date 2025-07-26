@@ -1,7 +1,5 @@
 # MinIO backup
 
-Postgres backup is a backup script for PostgreSQL databases. It dumps a database, compresses it and stores backups in a S3 bucket on your preferred cloud provider. This project is designed to run in a Docker container, making deployment and management straightforward.
-
 MinIO backup is a backup script for MinIO storage. It copies a bucket, compresses it and stores backups in a S3 bucket on your preferred cloud provider. This project is designed to run in a Docker container, making deployment and management straightforward.
 
 ## Configuration
