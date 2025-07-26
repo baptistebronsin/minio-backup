@@ -84,12 +84,12 @@ if [ -z "${BACKUP_COMPRESSION}" ]; then
     echo "BACKUP_COMPRESSION not set. Defaulting to 'zip'."
 fi
 
-cd "${ABSOLUTE_BACKUP_DIR}"
+cd "/home/backupuser"
 
 case "${BACKUP_COMPRESSION}" in
     gzip)
         echo "Compressing backup with gzip..."
-        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" .)
+        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${BACKUP_DIR}" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to create tar archive. Details:"
@@ -97,7 +97,7 @@ case "${BACKUP_COMPRESSION}" in
             exit 1
         fi
 
-        compress_output=$(gzip -f "${ABSOLUTE_BACKUP_FILE}.tar")
+        compress_output=$(gzip -f "${ABSOLUTE_BACKUP_FILE}.tar" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to compress the backup with gzip. Details:"
@@ -111,7 +111,7 @@ case "${BACKUP_COMPRESSION}" in
         ;;
     xz)
         echo "Compressing backup with xz..."
-        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" .)
+        compress_output=$(tar -cf "${ABSOLUTE_BACKUP_FILE}.tar" "${BACKUP_DIR}" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to create tar archive. Details:"
@@ -119,7 +119,7 @@ case "${BACKUP_COMPRESSION}" in
             exit 1
         fi
 
-        compress_output=$(xz -f "${ABSOLUTE_BACKUP_FILE}.tar")
+        compress_output=$(xz -f "${ABSOLUTE_BACKUP_FILE}.tar" 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to compress the backup with xz. Details:"
@@ -133,7 +133,7 @@ case "${BACKUP_COMPRESSION}" in
         ;;
     zip)
         echo "Compressing backup with zip..."
-        compress_output=$(zip -r "${ABSOLUTE_BACKUP_FILE}.zip" .)
+        compress_output=$(zip -r "${ABSOLUTE_BACKUP_FILE}.zip" . 2>&1)
 
         if [ $? -ne 0 ]; then
             echo "Error: Failed to compress the backup with zip. Details:"
