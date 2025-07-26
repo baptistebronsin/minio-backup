@@ -18,7 +18,7 @@ RUN mc --version
 
 COPY backup.sh /usr/local/bin/backup.sh
 
-RUN useradd -m -s /bin/bash backupuser
+RUN adduser -D -s /bin/bash backupuser
 RUN chmod +x /usr/local/bin/backup.sh && \
     chown backupuser:backupuser /usr/local/bin/backup.sh
 
