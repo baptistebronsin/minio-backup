@@ -8,6 +8,8 @@ This script requires several environment variables to work properly:
 
 | Variable | Description | Required | Example |
 | --- | --- | --- | --- |
+| TZ | Personalize timezone | no | Europe/Paris |
+| --- | --- | --- | --- |
 | MINIO_ENDPOINT | The host of the minio | yes | minio |
 | MINIO_ACCESS_KEY | The minIO access key | yes | dzqikdhei |
 | MINIO_SECRET_KEY | The minIO secret key | yes | dqzdqbdkdq |

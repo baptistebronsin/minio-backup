@@ -21,6 +21,11 @@ if [ -z "${MINIO_ENDPOINT}" ] || [ -z "${MINIO_ACCESS_KEY}" ] || [ -z "${MINIO_S
     exit 1
 fi
 
+# Use personalized timezone
+if [ -n "${TZ}" ]; then
+  export TZ="${TZ}"
+fi
+
 # Validate BACKUP_DIR
 if [ -n "${BACKUP_DIR}" ]; then
     echo "Validating BACKUP_DIR environment variable..."
